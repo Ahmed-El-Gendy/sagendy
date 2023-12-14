@@ -7,34 +7,13 @@
     tools:context=".ui.home.HomeFragment">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"
-        tools:layout_editor_absoluteX="60dp"
-        tools:layout_editor_absoluteY="145dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="236dp"
-        tools:layout_editor_absoluteY="147dp" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="239dp"
-        tools:layout_editor_absoluteY="453dp" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="81dp"
-        tools:layout_editor_absoluteY="449dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
