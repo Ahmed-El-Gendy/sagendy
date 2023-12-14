@@ -1,4 +1,4 @@
-package com.example.sagendy;
+package com.example.myapplicationdatabase;
 
 import org.junit.Test;
 

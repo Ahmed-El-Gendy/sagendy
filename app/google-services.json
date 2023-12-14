@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "832891549223",
+    "project_id": "sagendy-c42ea",
+    "storage_bucket": "sagendy-c42ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832891549223:android:2f6a783da190cb8f434002",
+        "android_client_info": {
+          "package_name": "com.example.myapplicationdatabase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBF6Z-1yazWIDOZmMeWNH6vybFeIgX_GA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

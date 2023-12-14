@@ -13,5 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SAGENDY"
+rootProject.name = "My Application Database"
 include(":app")
+ 
