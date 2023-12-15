@@ -1,6 +1,10 @@
 package com.example.sagendy;
 
+import static com.example.sagendy.R.id.action_settings;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +16,8 @@ import android.widget.Toast;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -28,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private FirebaseAuth mAuth;
+    boolean nightMode;
+    SharedPreferences nightModeShared;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        nightModeShared = getSharedPreferences("MODE", Context.MODE_PRIVATE);
+        nightMode = nightModeShared.getBoolean("night", false);
+        if (nightMode)
+        {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -73,6 +87,26 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_settings) {
+            // Handle the settings menu item click
+            openSettingsActivity();
+            return true;
+        }
+
+        // Handle other menu items if needed
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openSettingsActivity() {
+        Intent intent = new Intent(this, settingpage.class);
+        startActivity(intent);
+    }
+
 
     @Override
     protected void onStart() {

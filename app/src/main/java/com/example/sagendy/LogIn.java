@@ -51,7 +51,7 @@ public class LogIn extends AppCompatActivity {
 
     }
 
-    private void showSnackbar(String message) {
+    void showSnackbar(String message) {
         Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
     }
 

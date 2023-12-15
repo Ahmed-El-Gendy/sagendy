@@ -13,4 +13,6 @@
     <string name="saged">saged</string>
     <string name="signin">Log In</string>
     <string name="signinbutton">Log In</string>
+    <string name="logout">Log Out</string>
+    <string name="darkmode">Dark Mode On</string>
 </resources>

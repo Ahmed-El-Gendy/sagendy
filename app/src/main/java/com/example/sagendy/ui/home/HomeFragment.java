@@ -40,8 +40,7 @@ public class HomeFragment extends Fragment {
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.signOut();
-                startActivity(new Intent(getContext(), LogIn.class));
+
                 //mediaPlayer.start();
             }
         });
