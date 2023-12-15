@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "832891549223",
+    "firebase_url": "https://sagendy-c42ea-default-rtdb.firebaseio.com",
+    "project_id": "sagendy-c42ea",
+    "storage_bucket": "sagendy-c42ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832891549223:android:2d08030b74c7fb17434002",
+        "android_client_info": {
+          "package_name": "com.example.sagendy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBF6Z-1yazWIDOZmMeWNH6vybFeIgX_GA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
