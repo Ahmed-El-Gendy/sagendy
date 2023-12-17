@@ -41,7 +41,6 @@ public class settingpage extends AppCompatActivity {
         if (nightMode)
         {
             darkmodeSwitch.setChecked(true);
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         darkmodeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -51,16 +50,18 @@ public class settingpage extends AppCompatActivity {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     darkModeEditor = nightModeShared.edit();
                     darkModeEditor.putBoolean("night", false);
-                    showSnackbar("saged");
+                    showSnackbar("Dark Mode");
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     darkModeEditor = nightModeShared.edit();
                     darkModeEditor.putBoolean("night", true);
-                    showSnackbar("app");
+                    showSnackbar("Light Mode");
                 }
                 darkModeEditor.apply();
             }
         });
+
+
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

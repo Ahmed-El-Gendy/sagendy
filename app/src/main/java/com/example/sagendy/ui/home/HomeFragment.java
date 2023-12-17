@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +35,9 @@ public class HomeFragment extends Fragment {
 
 
     private FragmentHomeBinding binding;
+    TextView people;
+    ImageView fireOk, fireError, gasOk, gasError, safeOk, safeError;
     FirebaseAuth mAuth;
-    EditText test;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -43,44 +45,125 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);*/
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        Button b1,b2,b3,b4;
-        b1=root.findViewById(R.id.button1);
-        test = root.findViewById(R.id.testText);
         MediaPlayer mediaPlayer = MediaPlayer.create(getContext(),R.raw.saged);
         mAuth = FirebaseAuth.getInstance();
-
+        fireOk = root.findViewById(R.id.fireok);
+        fireError = root.findViewById(R.id.fireerrorpic);
+        gasOk = root.findViewById(R.id.gasok);
+        gasError = root.findViewById(R.id.gaserrorpic);
+        safeOk = root.findViewById(R.id.safeok);
+        safeError = root.findViewById(R.id.safeerrorpic);
+        people = root.findViewById(R.id.peopleText);
 
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("test");
 
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String t = test.getText().toString();
-                myRef.setValue(t);
-                //mediaPlayer.start();
-            }
-        });
+        //myRef.setValue(t);
+        //mediaPlayer.start();
+        //mediaPlayer.stop();
 
 
-        // Read from the database
-        DatabaseReference readRef = database.getReference("people");
-        readRef.addValueEventListener(new ValueEventListener() {
+        // Read people numper from the database
+        DatabaseReference readpeopleRef = database.getReference("people");
+        readpeopleRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 int value = dataSnapshot.getValue(int.class);
-                Log.d(TAG, "Value is: " + value);
+                people.setText("Numper of people is: "+value);
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                Log.w(TAG, "Failed to read people value.", error.toException());
             }
         });
+
+
+        // Read fire value from the database
+        DatabaseReference readfireRef = database.getReference("fire");
+        readfireRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                boolean value = dataSnapshot.getValue(boolean.class);
+                if (value)
+                {
+                    fireOk.setVisibility(View.VISIBLE);
+                    fireError.setVisibility(View.INVISIBLE);
+                }
+                else
+                {
+                    fireOk.setVisibility(View.INVISIBLE);
+                    fireError.setVisibility(View.VISIBLE);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read fire value.", error.toException());
+            }
+        });
+
+
+        // Read fire value from the database
+        DatabaseReference readgasRef = database.getReference("gas");
+        readgasRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                int value = dataSnapshot.getValue(int.class);
+                if (value<500)
+                {
+                    gasOk.setVisibility(View.VISIBLE);
+                    gasError.setVisibility(View.INVISIBLE);
+                }
+                else
+                {
+                    gasOk.setVisibility(View.INVISIBLE);
+                    gasError.setVisibility(View.VISIBLE);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read gas value.", error.toException());
+            }
+        });
+
+
+
+        // Read safety value from the database
+        DatabaseReference readsafeRef = database.getReference("safe");
+        readsafeRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                boolean value = dataSnapshot.getValue(boolean.class);
+                if (value)
+                {
+                    safeOk.setVisibility(View.VISIBLE);
+                    safeError.setVisibility(View.INVISIBLE);
+                }
+                else
+                {
+                    safeOk.setVisibility(View.INVISIBLE);
+                    safeError.setVisibility(View.VISIBLE);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read safe value.", error.toException());
+            }
+        });
+
+
 
         //final TextView textView = binding.textHome;
         //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
