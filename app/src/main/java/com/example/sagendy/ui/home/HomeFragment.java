@@ -1,8 +1,11 @@
 package com.example.sagendy.ui.home;
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +34,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ktx.Firebase;
 
+import java.util.Locale;
+
 public class HomeFragment extends Fragment {
 
 
@@ -38,6 +43,7 @@ public class HomeFragment extends Fragment {
     TextView people;
     ImageView fireOk, fireError, gasOk, gasError, safeOk, safeError;
     FirebaseAuth mAuth;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +68,7 @@ public class HomeFragment extends Fragment {
         //myRef.setValue(t);
         //mediaPlayer.start();
         //mediaPlayer.stop();
+
 
 
         // Read people numper from the database
@@ -175,6 +182,19 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void changeLanguage(String languageCode) {
+        // Change app language
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+        // Restart the activity to apply the language change
+
+        //recreate();
     }
 
 }

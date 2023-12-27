@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -21,8 +22,11 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,22 +40,26 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
+import java.util.Objects;
 
 public class settingpage extends AppCompatActivity {
 
     private Button logoutButton;
+    private RadioGroup langGroup;
+    private RadioButton englishLang, arabicLang;
     private Switch darkmodeSwitch;
     boolean nightMode;
     private ImageView personView;
     private static final int PICK_IMAGE_REQUEST = 1;
-    private TextView firstName, lastName, age, subDate;
+    private TextView firstName, lastName, age, subDate, langText;
     private EditText firstnameEdit, lastnameEdit, ageEdit;
     SharedPreferences personSave, firstnameSave, lastnameSave, ageSave;
     SharedPreferences.Editor personEditor, firstnameEditor, lastnameEditor, ageEditor;
 
 
-    SharedPreferences nightModeShared;
-    SharedPreferences.Editor darkModeEditor;
+    SharedPreferences nightModeShared, langSave;
+    SharedPreferences.Editor darkModeEditor, langEditor;
     FirebaseAuth mAuth;
 
     @Override
@@ -64,6 +72,42 @@ public class settingpage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         getSupportActionBar().hide();
+
+        // change language
+        langSave = getPreferences(MODE_PRIVATE);
+        langGroup = findViewById(R.id.langgroup);
+        englishLang = findViewById(R.id.englishlang);
+        arabicLang = findViewById(R.id.arabiclang);
+        langText = findViewById(R.id.changelang);
+        // change lang
+        /*String langValue = langSave.getString("lang", null);
+        if (Objects.equals(langValue, "ar"))
+        {
+            arabicLang.setChecked(true);
+            changeLanguage("ar");
+        }*/
+        // Set a listener for the RadioGroup
+        langGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // Check which radio button is selected
+                RadioButton radioButton = findViewById(checkedId);
+                langEditor = langSave.edit();
+                if (radioButton == arabicLang)
+                {
+                    changeLanguage("ar");
+                    showSnackbar("Language changed to Arabic Restart page");
+                    langEditor.putString("lang", "ar");
+                    langEditor.apply();
+                }
+                else if (radioButton == englishLang)
+                {
+                    //changeLanguageToDefault();
+                    //langEditor.putString("lang", null);
+                }
+            }
+        });
+
 
 
         // account data
@@ -303,8 +347,22 @@ public class settingpage extends AppCompatActivity {
         FileOutputStream outputStream = new FileOutputStream(internalImageFile);
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         outputStream.close();
-
         return internalImageFile.getAbsolutePath();
     }
+
+    private void changeLanguage(String languageCode) {
+        // Change app language
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+        // Restart the activity to apply the language change
+
+        //recreate();
+    }
+
+
 
 }

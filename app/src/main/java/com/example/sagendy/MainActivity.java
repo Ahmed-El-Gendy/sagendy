@@ -5,6 +5,7 @@ import static com.example.sagendy.R.id.action_settings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,13 +30,18 @@ import com.example.sagendy.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Locale;
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private FirebaseAuth mAuth;
     boolean nightMode;
-    SharedPreferences nightModeShared;
+    SharedPreferences nightModeShared, langSave;
+    SharedPreferences.Editor langEditor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,18 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+        // change lang
+        /*langSave = getPreferences(MODE_PRIVATE);
+        String langValue = langSave.getString("lang", null);
+        if (Objects.equals(langValue, "ar"))
+        {
+            changeLanguage("ar");
+            recreate();
+        }*/
+
+
 
         nightModeShared = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = nightModeShared.getBoolean("night", false);
@@ -120,6 +138,19 @@ public class MainActivity extends AppCompatActivity {
         {
             startActivity(new Intent(MainActivity.this, LogIn.class));
         }
+    }
+
+    private void changeLanguage(String languageCode) {
+        // Change app language
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+        // Restart the activity to apply the language change
+
+        //recreate();
     }
 
 

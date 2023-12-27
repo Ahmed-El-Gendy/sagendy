@@ -15,8 +15,8 @@
     <string name="signinbutton">Log In</string>
     <string name="logout">Log Out</string>
     <string name="darkmode">Dark Mode On</string>
-    <string name="firetext">Fire</string>
-    <string name="gastext">Gas</string>
+    <string name="firetext">نار</string>
+    <string name="gastext">غاز</string>
     <string name="safetytext">Home safety</string>
     <string name="homemodeltext">Home Model</string>
     <string name="bathroomtext">Bathroom</string>
@@ -26,7 +26,7 @@
     <string name="lastnametext">Last Name</string>
     <string name="agetext">Age</string>
     <string name="subdatetext">Subscribe date: 00/00/0000</string>
-    <string name="englishlang">English</string>
-    <string name="arabiclang">Arabic</string>
-    <string name="changelang">Change Language</string>
+    <string name="englishlang">انجليزي</string>
+    <string name="arabiclang">عربي</string>
+    <string name="changelang">تغيير اللغة</string>
 </resources>
