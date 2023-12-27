@@ -110,38 +110,38 @@
         app:layout_constraintVertical_bias="0.901" />
 
     <ImageView
-        android:id="@+id/fireerrorpic"
-        android:layout_width="84dp"
-        android:layout_height="89dp"
-        android:src="@drawable/errorpic"
+        android:id="@+id/fireerrrpic"
+        android:layout_width="103dp"
+        android:layout_height="113dp"
+        android:src="@drawable/baseline_local_fire_department_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.272"
+        app:layout_constraintHorizontal_bias="0.266"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.409" />
+        app:layout_constraintVertical_bias="0.42" />
 
     <ImageView
-        android:id="@+id/gaserrorpic"
-        android:layout_width="86dp"
-        android:layout_height="87dp"
-        android:src="@drawable/errorpic"
+        android:id="@+id/gaserrrpic"
+        android:layout_width="92dp"
+        android:layout_height="99dp"
+        android:src="@drawable/gaserror"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.723"
+        app:layout_constraintHorizontal_bias="0.736"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.408" />
+        app:layout_constraintVertical_bias="0.411" />
 
     <ImageView
-        android:id="@+id/safeerrorpic"
-        android:layout_width="83dp"
-        android:layout_height="87dp"
-        android:src="@drawable/errorpic"
+        android:id="@+id/safeerrrpic"
+        android:layout_width="99dp"
+        android:layout_height="99dp"
+        android:src="@drawable/download__1_"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.697" />
+        app:layout_constraintVertical_bias="0.71" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -48,11 +48,11 @@ public class HomeFragment extends Fragment {
         MediaPlayer mediaPlayer = MediaPlayer.create(getContext(),R.raw.saged);
         mAuth = FirebaseAuth.getInstance();
         fireOk = root.findViewById(R.id.fireok);
-        fireError = root.findViewById(R.id.fireerrorpic);
+        fireError = root.findViewById(R.id.fireerrrpic);
         gasOk = root.findViewById(R.id.gasok);
-        gasError = root.findViewById(R.id.gaserrorpic);
+        gasError = root.findViewById(R.id.gaserrrpic);
         safeOk = root.findViewById(R.id.safeok);
-        safeError = root.findViewById(R.id.safeerrorpic);
+        safeError = root.findViewById(R.id.safeerrrpic);
         people = root.findViewById(R.id.peopleText);
 
         // Write a message to the database
@@ -117,7 +117,7 @@ public class HomeFragment extends Fragment {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 int value = dataSnapshot.getValue(int.class);
-                if (value<500)
+                if (value<1000)
                 {
                     gasOk.setVisibility(View.VISIBLE);
                     gasError.setVisibility(View.INVISIBLE);
