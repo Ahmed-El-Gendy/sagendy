@@ -22,4 +22,8 @@
     <string name="bathroomtext">Bathroom</string>
     <string name="kitchentext">Kitchen</string>
     <string name="livingroomtext">Living room</string>
+    <string name="firstnametext">First Name</string>
+    <string name="lastnametext">Last Name</string>
+    <string name="agetext">Age</string>
+    <string name="subdatetext">Subscribe date: 00/00/0000</string>
 </resources>
