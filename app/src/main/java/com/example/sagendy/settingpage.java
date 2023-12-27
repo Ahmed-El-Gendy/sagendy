@@ -90,18 +90,23 @@ public class settingpage extends AppCompatActivity {
         lastnameEditor = lastnameSave.edit();
         ageEditor = ageSave.edit();
 
-        if (firstnameSave != null) {
-            String firstnameValue = firstnameSave.getString("firstname", null);
+
+        String firstnameValue = firstnameSave.getString("firstname", null);
+        if (firstnameValue != null)
+        {
             firstName.setText(firstnameValue);
         }
-        if (lastnameSave != null) {
-            String lastnameValue = lastnameSave.getString("lastname", null);
+        String lastnameValue = lastnameSave.getString("lastname", null);
+        if (lastnameValue != null)
+        {
             lastName.setText(lastnameValue);
         }
-        if (ageSave != null) {
-            String ageValue = ageSave.getString("age", null);
+        String ageValue = ageSave.getString("age", null);
+        if (ageValue != null)
+        {
             age.setText("Age: " + ageValue);
         }
+
 
         // Read subscribe date from the database
         DatabaseReference readdataRef = database.getReference("date");
@@ -128,7 +133,7 @@ public class settingpage extends AppCompatActivity {
                 // Show EditText
                 firstnameEdit.setVisibility(View.VISIBLE);
                 // Set EditText text to TextView text
-                firstnameEdit.setText(firstName.getText());
+                firstnameEdit.setText(firstName.getText().toString());
                 // Set focus to EditText and open keyboard
                 firstnameEdit.requestFocus();
             }
@@ -143,7 +148,7 @@ public class settingpage extends AppCompatActivity {
                     // Show TextView
                     firstName.setVisibility(View.VISIBLE);
                     // Update TextView text with EditText text
-                    firstName.setText(firstnameEdit.getText());
+                    firstName.setText(firstnameEdit.getText().toString());
                     firstnameEditor.putString("firstname", firstName.getText().toString());
                     firstnameEditor.apply();
                 }
@@ -158,7 +163,7 @@ public class settingpage extends AppCompatActivity {
                 // Show EditText
                 lastnameEdit.setVisibility(View.VISIBLE);
                 // Set EditText text to TextView text
-                lastnameEdit.setText(lastName.getText());
+                lastnameEdit.setText(lastName.getText().toString());
                 // Set focus to EditText and open keyboard
                 lastnameEdit.requestFocus();
             }
@@ -173,7 +178,7 @@ public class settingpage extends AppCompatActivity {
                     // Show TextView
                     lastName.setVisibility(View.VISIBLE);
                     // Update TextView text with EditText text
-                    lastName.setText(lastnameEdit.getText());
+                    lastName.setText(lastnameEdit.getText().toString());
                     lastnameEditor.putString("lastname", lastName.getText().toString());
                     lastnameEditor.apply();
                 }
