@@ -9,7 +9,8 @@
 
     <string name="menu_home">States</string>
     <string name="menu_gallery">Home View</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_slideshow">History</string>
+    <string name="menu_aboutus">About Us</string>
     <string name="saged">saged</string>
     <string name="signin">Log In</string>
     <string name="signinbutton">Log In</string>
