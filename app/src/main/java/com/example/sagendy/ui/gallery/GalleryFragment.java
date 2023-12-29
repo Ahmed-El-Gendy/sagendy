@@ -2,8 +2,6 @@ package com.example.sagendy.ui.gallery;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -32,7 +30,6 @@ import com.google.firebase.database.ValueEventListener;
 public class GalleryFragment extends Fragment {
 
     private FragmentGalleryBinding binding;
-    ImageView bathClose, bathOpen, kitchenClose, kitchenOpen, livingClose, livingOpen;
     ImageView bathLamp, kitchenLamp, livingLamp;
     TextView lampText;
     SeekBar seekBar;
@@ -44,16 +41,10 @@ public class GalleryFragment extends Fragment {
 
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        bathClose = root.findViewById(R.id.bathroomdoorclose);
-        bathOpen = root.findViewById(R.id.bathroomdooropen);
-        kitchenClose = root.findViewById(R.id.kitchendoorclose);
-        kitchenOpen = root.findViewById(R.id.kitchendooropen);
-        livingClose = root.findViewById(R.id.homedoorclose);
-        livingOpen = root.findViewById(R.id.homedooropen);
         lampText = root.findViewById(R.id.lightText);
         seekBar = root.findViewById(R.id.seekBarlamp);
-        bathLamp = root.findViewById(R.id.bathroomlamp);
-        kitchenLamp = root.findViewById(R.id.kitchenlamp);
+        bathLamp = root.findViewById(R.id.leftrooflamp);
+        kitchenLamp = root.findViewById(R.id.rightrooflamp);
         livingLamp = root.findViewById(R.id.livingroomlamp);
 
 
@@ -62,7 +53,7 @@ public class GalleryFragment extends Fragment {
         // connect to database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-
+/*
         // Read bathroom door value from the database
         DatabaseReference readbathdoorRef = database.getReference("bathroom/door");
         readbathdoorRef.addValueEventListener(new ValueEventListener() {
@@ -89,8 +80,8 @@ public class GalleryFragment extends Fragment {
             }
         });
 
-
-
+*/
+/*
 
         // Read kitchen door value from the database
         DatabaseReference readkitchendoorRef = database.getReference("kitchen/door");
@@ -118,7 +109,8 @@ public class GalleryFragment extends Fragment {
             }
         });
 
-
+*/
+        /*
         // Read livingroom door value from the database
         DatabaseReference readlivingroomdoorRef = database.getReference("livingroom/door");
         readlivingroomdoorRef.addValueEventListener(new ValueEventListener() {
@@ -145,7 +137,7 @@ public class GalleryFragment extends Fragment {
             }
         });
 
-
+*/
         int colorToFilterGray = Color.GRAY;
         int colorToFilterlight = Color.rgb(255, 128, 0);
         int colorToFilteryellow = Color.YELLOW;
@@ -263,7 +255,7 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 lampText.setVisibility(View.VISIBLE);
-                lampText.setText("Bathroom Lamp");
+                lampText.setText(R.string.leftroofshow);
                 seekBar.setVisibility(View.VISIBLE);
                 //seekBar.setProgress(bathlampvalue[0]);
                 whichLamp[0] = 1;
@@ -273,7 +265,7 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 lampText.setVisibility(View.VISIBLE);
-                lampText.setText("Kitchen Lamp");
+                lampText.setText(R.string.rightroofshow);
                 seekBar.setVisibility(View.VISIBLE);
                 //seekBar.setProgress(kitchenlampvalue[0]);
                 whichLamp[0] = 2;
@@ -283,7 +275,7 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 lampText.setVisibility(View.VISIBLE);
-                lampText.setText("Living room Lamp");
+                lampText.setText(R.string.livingroomshow);
                 seekBar.setVisibility(View.VISIBLE);
                 //seekBar.setProgress(livinglampvalue[0]);
                 whichLamp[0] = 3;
@@ -314,18 +306,18 @@ public class GalleryFragment extends Fragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                /*if (whichLamp[0] == 1)
-                {
-                    seekBar.setProgress(bathlampvalue[0]);
-                }
-                else if (whichLamp[0] == 2)
-                {
-                    seekBar.setProgress(kitchenlampvalue[0]);
-                }
-                else
-                {
-                    seekBar.setProgress(livinglampvalue[0]);
-                }*/
+//                if (whichLamp[0] == 1)
+//                {
+//                    seekBar.setProgress(bathlampvalue[0]);
+//                }
+//                else if (whichLamp[0] == 2)
+//                {
+//                    seekBar.setProgress(kitchenlampvalue[0]);
+//                }
+//                else
+//                {
+//                    seekBar.setProgress(livinglampvalue[0]);
+//                }
             }
 
             @Override

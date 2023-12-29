@@ -20,8 +20,8 @@
     <string name="gastext">Gas</string>
     <string name="safetytext">Home safety</string>
     <string name="homemodeltext">Home Model</string>
-    <string name="bathroomtext">Bathroom</string>
-    <string name="kitchentext">Kitchen</string>
+    <string name="leftrooftext">Left Roof</string>
+    <string name="rightrooftext">Right Roof</string>
     <string name="livingroomtext">Living room</string>
     <string name="firstnametext">First Name</string>
     <string name="lastnametext">Last Name</string>
@@ -30,4 +30,8 @@
     <string name="englishlang">English</string>
     <string name="arabiclang">Arabic</string>
     <string name="changelang">Change Language</string>
+    <string name="leftroofshow">Left roof Lamp</string>
+    <string name="rightroofshow">Right roof Lamp</string>
+    <string name="livingroomshow">Living room Lamp</string>
+
 </resources>
