@@ -7,23 +7,29 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +55,7 @@ public class settingpage extends AppCompatActivity {
     private RadioGroup langGroup;
     private RadioButton englishLang, arabicLang;
     private Switch darkmodeSwitch;
+    private Spinner langSpinner;
     boolean nightMode;
     private ImageView personView;
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -56,7 +63,9 @@ public class settingpage extends AppCompatActivity {
     private EditText firstnameEdit, lastnameEdit, ageEdit;
     SharedPreferences personSave, firstnameSave, lastnameSave, ageSave;
     SharedPreferences.Editor personEditor, firstnameEditor, lastnameEditor, ageEditor;
-
+    public static final String[] languages = {"Select Language", "English", "عربي" , "Türk", "日本語"};
+    Context context;
+    Resources resources;
 
     SharedPreferences nightModeShared, langSave;
     SharedPreferences.Editor darkModeEditor, langEditor;
@@ -74,37 +83,42 @@ public class settingpage extends AppCompatActivity {
         getSupportActionBar().hide();
 
         // change language
-        langSave = getPreferences(MODE_PRIVATE);
-        langGroup = findViewById(R.id.langgroup);
-        englishLang = findViewById(R.id.englishlang);
-        arabicLang = findViewById(R.id.arabiclang);
-        langText = findViewById(R.id.changelang);
-        // change lang
-        /*String langValue = langSave.getString("lang", null);
-        if (Objects.equals(langValue, "ar"))
-        {
-            arabicLang.setChecked(true);
-            changeLanguage("ar");
+        /*String savedLanguage = getSavedLanguage();
+        if (savedLanguage != null) {
+            changeLang(savedLanguage);
         }*/
-        // Set a listener for the RadioGroup
-        langGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        langText = findViewById(R.id.changelang);
+        langSave = getSharedPreferences("lang", Context.MODE_PRIVATE);
+        langSpinner = findViewById(R.id.langspinner);
+        ArrayAdapter<String> langAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languages);
+        langAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        langSpinner.setAdapter(langAdapter);
+        langSpinner.setSelection(0);
+        langSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // Check which radio button is selected
-                RadioButton radioButton = findViewById(checkedId);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected = parent.getItemAtPosition(position).toString();
                 langEditor = langSave.edit();
-                if (radioButton == arabicLang)
+                if (selected.equals("English"))
                 {
-                    changeLanguage("ar");
-                    showSnackbar("Language changed to Arabic Restart page");
-                    langEditor.putString("lang", "ar");
+                    changeLang("en");
+                    langEditor.putString("lang", "en");
                     langEditor.apply();
                 }
-                else if (radioButton == englishLang)
+                else if (selected.equals("عربي"))
                 {
-                    //changeLanguageToDefault();
-                    //langEditor.putString("lang", null);
+                    changeLang("ar");
+                    langEditor.putString("lang", "ar");
+                    langEditor.apply();
+                    /*showSnackbar("Language changed to Arabic Restart page");
+                    langEditor.putString("lang", "ar");
+                    langEditor.apply();*/
                 }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -349,18 +363,16 @@ public class settingpage extends AppCompatActivity {
         outputStream.close();
         return internalImageFile.getAbsolutePath();
     }
+    public void changeLang(String lang) {
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        if (!"".equals(lang) && !config.locale.getLanguage().equals(lang)) {
 
-    private void changeLanguage(String languageCode) {
-        // Change app language
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-
-        // Restart the activity to apply the language change
-
-        //recreate();
+            Locale locale = new Locale(lang);
+            Locale.setDefault(locale);
+            Configuration conf = new Configuration(config);
+            conf.locale = locale;
+            getBaseContext().getResources().updateConfiguration(conf, getBaseContext().getResources().getDisplayMetrics());
+        }
     }
 
 

@@ -150,30 +150,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.177" />
 
-    <RadioGroup
-        android:id="@+id/langgroup"
-        android:layout_width="135dp"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.533">
-
-        <RadioButton
-            android:id="@+id/englishlang"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/englishlang" />
-
-        <RadioButton
-            android:id="@+id/arabiclang"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/arabiclang" />
-
-    </RadioGroup>
-
     <View
         android:id="@+id/divider"
         android:layout_width="409dp"
@@ -222,14 +198,13 @@
         app:layout_constraintVertical_bias="0.405" />
 
     <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="98dp"
-        android:layout_height="119dp"
+        android:id="@+id/langspinner"
+        android:layout_width="167dp"
+        android:layout_height="88dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.051"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.534" />
+        app:layout_constraintVertical_bias="0.528" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

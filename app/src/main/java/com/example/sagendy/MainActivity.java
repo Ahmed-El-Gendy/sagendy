@@ -1,12 +1,14 @@
 package com.example.sagendy;
 
 import static com.example.sagendy.R.id.action_settings;
+import static com.example.sagendy.R.id.changelang;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -61,17 +63,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        // change lang
-        /*langSave = getPreferences(MODE_PRIVATE);
-        String langValue = langSave.getString("lang", null);
-        if (Objects.equals(langValue, "ar"))
-        {
-            changeLanguage("ar");
-            recreate();
-        }*/
-
-
-
         nightModeShared = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = nightModeShared.getBoolean("night", false);
         if (nightMode)
@@ -81,6 +72,18 @@ public class MainActivity extends AppCompatActivity {
         else
         {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+
+        // check lang
+        langSave = getSharedPreferences("lang", Context.MODE_PRIVATE);
+        String langValue = langSave.getString("lang", null).toString();
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        if (langValue != null && !"".equals(langValue) && !config.locale.getLanguage().equals(langValue))
+        {
+            changeLang(langValue);
+            showSnackbar(langValue);
+            recreate();
         }
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -140,18 +143,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void changeLanguage(String languageCode) {
-        // Change app language
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+    public void changeLang(String lang) {
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        if (!"".equals(lang) && !config.locale.getLanguage().equals(lang)) {
 
-        // Restart the activity to apply the language change
-
-        //recreate();
+            Locale locale = new Locale(lang);
+            Locale.setDefault(locale);
+            Configuration conf = new Configuration(config);
+            conf.locale = locale;
+            getBaseContext().getResources().updateConfiguration(conf, getBaseContext().getResources().getDisplayMetrics());
+        }
     }
 
+    void showSnackbar(String message) {
+        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
+    }
 
 }

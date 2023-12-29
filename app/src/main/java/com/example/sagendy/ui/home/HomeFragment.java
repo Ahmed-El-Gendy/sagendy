@@ -3,11 +3,14 @@ package com.example.sagendy.ui.home;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +71,6 @@ public class HomeFragment extends Fragment {
         //myRef.setValue(t);
         //mediaPlayer.start();
         //mediaPlayer.stop();
-
 
 
         // Read people numper from the database
@@ -179,22 +181,16 @@ public class HomeFragment extends Fragment {
 
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
 
-    private void changeLanguage(String languageCode) {
-        // Change app language
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-
-        // Restart the activity to apply the language change
-
-        //recreate();
-    }
 
 }
