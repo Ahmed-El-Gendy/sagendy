@@ -101,18 +101,17 @@ public class settingpage extends AppCompatActivity {
                 langEditor = langSave.edit();
                 if (selected.equals("English"))
                 {
-                    changeLang("en");
+                    //changeLang("en");
                     langEditor.putString("lang", "en");
                     langEditor.apply();
+                    showSnackbar("Language will change to English after restarting app");
                 }
                 else if (selected.equals("عربي"))
                 {
-                    changeLang("ar");
+                    //changeLang("ar");
                     langEditor.putString("lang", "ar");
                     langEditor.apply();
-                    /*showSnackbar("Language changed to Arabic Restart page");
-                    langEditor.putString("lang", "ar");
-                    langEditor.apply();*/
+                    showSnackbar("Language will change to Arabic after restarting app");
                 }
             }
 
@@ -363,17 +362,7 @@ public class settingpage extends AppCompatActivity {
         outputStream.close();
         return internalImageFile.getAbsolutePath();
     }
-    public void changeLang(String lang) {
-        Configuration config = getBaseContext().getResources().getConfiguration();
-        if (!"".equals(lang) && !config.locale.getLanguage().equals(lang)) {
 
-            Locale locale = new Locale(lang);
-            Locale.setDefault(locale);
-            Configuration conf = new Configuration(config);
-            conf.locale = locale;
-            getBaseContext().getResources().updateConfiguration(conf, getBaseContext().getResources().getDisplayMetrics());
-        }
-    }
 
 
 
