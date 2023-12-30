@@ -10,6 +10,7 @@
     <string name="menu_home">States</string>
     <string name="menu_gallery">Home View</string>
     <string name="menu_slideshow">History</string>
+    <string name="menu_location">Edit Location</string>
     <string name="menu_aboutus">About Us</string>
     <string name="saged">saged</string>
     <string name="signin">Log In</string>
@@ -34,5 +35,13 @@
     <string name="rightroofshow">Right roof Lamp</string>
     <string name="livingroomshow">Living room Lamp</string>
     <string name="temptext">Temp</string>
+    <string name="editlocation">Edit Location</string>
+    <string name="gpstracker">GPS Location</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="homelocation">Home Location</string>
+    <string name="savelocation">Save Location</string>
+    <string name="locationinfo">To see how to use it click here</string>
+    <string name="locationuse">Take those 2 numbers and put them in the boxes</string>
 
 </resources>

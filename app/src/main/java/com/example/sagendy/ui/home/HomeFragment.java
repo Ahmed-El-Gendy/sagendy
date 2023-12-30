@@ -59,6 +59,7 @@ public class HomeFragment extends Fragment {
     FirebaseAuth mAuth;
     private LocationManager locationManager;
     private Location currentLocation;
+    SharedPreferences latitudeSave, longitudeSave, gpsSave;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -213,7 +214,17 @@ public class HomeFragment extends Fragment {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 123);
         } else {
             // Permission is already granted, proceed to get the last known location
-            getLocation();
+            gpsSave = requireContext().getSharedPreferences("gps", Context.MODE_PRIVATE);
+            boolean gpsbool = gpsSave.getBoolean("gps", false);
+            if (gpsbool)
+            {
+                homeDistance.setVisibility(View.VISIBLE);
+                getLocation();
+            }
+            else
+            {
+                homeDistance.setVisibility(View.INVISIBLE);
+            }
         }
 
 
@@ -277,9 +288,13 @@ public class HomeFragment extends Fragment {
             double userLong = location.getLongitude();
             System.out.println("Updated Location: lat: " + userLat + ", long: " + userLong);
             Location locationA = new Location("Point A");
-            locationA.setLatitude(31.258601); // Replace with the actual latitude of Point A
-            locationA.setLongitude(32.261924); // Replace with the actual longitude of Point A
-
+            latitudeSave = requireContext().getSharedPreferences("latitude", Context.MODE_PRIVATE);
+            longitudeSave = requireContext().getSharedPreferences("longitude", Context.MODE_PRIVATE);
+            float lat = latitudeSave.getFloat("latitude", 31.258601F);
+            float lon = longitudeSave.getFloat("longitude", 32.261924F);
+            locationA.setLatitude(lat); // Replace with the actual latitude of Point A
+            locationA.setLongitude(lon); // Replace with the actual longitude of Point A
+            System.out.println("SETTED Location: lat: " + lat + ", long: " + lon);
             Location locationB = new Location("Point B");
             locationB.setLatitude(userLat); // Replace with the actual latitude of Point B
             locationB.setLongitude(userLong); // Replace with the actual longitude of Point B

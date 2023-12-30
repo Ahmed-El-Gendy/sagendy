@@ -24,6 +24,12 @@
         tools:layout="@layout/fragment_slideshow" />
 
     <fragment
+        android:id="@+id/nav_location"
+        android:name="com.example.sagendy.ui.location.LocationFragment"
+        android:label="@string/menu_location"
+        tools:layout="@layout/fragment_location" />
+
+    <fragment
         android:id="@+id/nav_aboutus"
         android:name="com.example.sagendy.ui.aboutus.AboutusFragment"
         android:label="@string/menu_aboutus"
