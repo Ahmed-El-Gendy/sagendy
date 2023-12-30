@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // check lang
-        langSave = getSharedPreferences("lang", Context.MODE_PRIVATE);
+        /*langSave = getSharedPreferences("lang", Context.MODE_PRIVATE);
         String langValue = langSave.getString("lang", null).toString();
         Configuration config = getBaseContext().getResources().getConfiguration();
         if (langValue != null && !"".equals(langValue) && !config.locale.getLanguage().equals(langValue))
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             changeLang(langValue);
             showSnackbar(langValue);
             recreate();
-        }
+        }*/
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;

@@ -201,6 +201,7 @@
         android:id="@+id/langspinner"
         android:layout_width="200dp"
         android:layout_height="88dp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.516"

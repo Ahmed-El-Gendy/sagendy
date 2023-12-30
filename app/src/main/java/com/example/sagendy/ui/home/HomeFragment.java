@@ -2,12 +2,19 @@ package com.example.sagendy.ui.home;
 
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+import static androidx.constraintlayout.motion.widget.Debug.getLocation;
+import static androidx.core.content.ContextCompat.getSystemService;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,10 +29,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.sagendy.LogIn;
 import com.example.sagendy.MainActivity;
+import android.Manifest;
 import com.example.sagendy.R;
 import com.example.sagendy.databinding.FragmentHomeBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,15 +47,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ktx.Firebase;
 
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 public class HomeFragment extends Fragment {
 
 
     private FragmentHomeBinding binding;
-    TextView people;
+    TextView people, temp, homeDistance;
     ImageView fireOk, fireError, gasOk, gasError, safeOk, safeError;
     FirebaseAuth mAuth;
+    private LocationManager locationManager;
+    private Location currentLocation;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -63,6 +76,8 @@ public class HomeFragment extends Fragment {
         safeOk = root.findViewById(R.id.safeok);
         safeError = root.findViewById(R.id.safeerrrpic);
         people = root.findViewById(R.id.peopleText);
+        temp = root.findViewById(R.id.temptext);
+        homeDistance = root.findViewById(R.id.homechecktext);
 
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -72,6 +87,22 @@ public class HomeFragment extends Fragment {
         //mediaPlayer.start();
         //mediaPlayer.stop();
 
+        // Read Temperature from the database
+        DatabaseReference readtempRef = database.getReference("temp");
+        readtempRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                int value = dataSnapshot.getValue(int.class);
+                temp.setText("Temperature: " + value + " °C");
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read temp value.", error.toException());
+            }
+        });
 
         // Read people numper from the database
         DatabaseReference readpeopleRef = database.getReference("people");
@@ -172,6 +203,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // GPS
+        locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        // Check for location permission
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Request location permissions
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 123);
+        } else {
+            // Permission is already granted, proceed to get the last known location
+            getLocation();
+        }
+
 
 
         //final TextView textView = binding.textHome;
@@ -185,12 +229,93 @@ public class HomeFragment extends Fragment {
         super.onStart();
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Check and request location updates when the activity is resumed
+        requestLocationUpdates();
+    }
+    private void requestLocationUpdates() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    // Location was changed
+                    handleLocation(location);
+                }
+            });
+        }
+    }
+
+
+    @SuppressLint("MissingPermission")
+    private void getLocation() {
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+
+        if (lastKnownLocation != null) {
+            // Use the last known location
+            double userLat = lastKnownLocation.getLatitude();
+            double userLong = lastKnownLocation.getLongitude();
+            System.out.println("Last Known Location: lat: " + userLat + ", long: " + userLong);
+        } else {
+            // Handle the case where last known location is null
+            System.out.println("Last Known Location is null");
+        }
+    }
+
+    private void handleLocation(Location location) {
+        if (location != null) {
+            // Handle the updated location
+            double userLat = location.getLatitude();
+            double userLong = location.getLongitude();
+            System.out.println("Updated Location: lat: " + userLat + ", long: " + userLong);
+            Location locationA = new Location("Point A");
+            locationA.setLatitude(31.258601); // Replace with the actual latitude of Point A
+            locationA.setLongitude(32.261924); // Replace with the actual longitude of Point A
+
+            Location locationB = new Location("Point B");
+            locationB.setLatitude(userLat); // Replace with the actual latitude of Point B
+            locationB.setLongitude(userLong); // Replace with the actual longitude of Point B
+
+            float distance = getDistance(locationA, locationB);
+
+            // Print or use the distance as needed
+            System.out.println("Distance between Point A and Point B: " + distance + " meters");
+            if (distance < 30)
+            {
+                homeDistance.setText("You are at home \uD83D\uDE0A");
+            }
+            else
+            {
+                // Create a DecimalFormat object with the desired format
+                DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                // Format the double number
+                String formattedNumber = decimalFormat.format(distance/1000);
+                homeDistance.setText("You are away " + formattedNumber + " km");
+            }
+        }
+    }
+    private float getDistance(Location locationA, Location locationB) {
+        return locationA.distanceTo(locationB);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 123 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Permission granted, proceed to get the last known location
+            getLocation();
+        } else {
+            // Permission denied, handle accordingly
+            System.out.println("Location permission denied");
+        }
+    }
 
 }

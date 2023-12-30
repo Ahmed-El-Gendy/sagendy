@@ -33,5 +33,6 @@
     <string name="leftroofshow">Left roof Lamp</string>
     <string name="rightroofshow">Right roof Lamp</string>
     <string name="livingroomshow">Living room Lamp</string>
+    <string name="temptext">Temp</string>
 
 </resources>

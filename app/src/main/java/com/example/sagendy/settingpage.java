@@ -82,11 +82,6 @@ public class settingpage extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        // change language
-        /*String savedLanguage = getSavedLanguage();
-        if (savedLanguage != null) {
-            changeLang(savedLanguage);
-        }*/
         langText = findViewById(R.id.changelang);
         langSave = getSharedPreferences("lang", Context.MODE_PRIVATE);
         langSpinner = findViewById(R.id.langspinner);
@@ -99,7 +94,7 @@ public class settingpage extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selected = parent.getItemAtPosition(position).toString();
                 langEditor = langSave.edit();
-                if (selected.equals("English"))
+                /*if (selected.equals("English"))
                 {
                     //changeLang("en");
                     langEditor.putString("lang", "en");
@@ -112,7 +107,7 @@ public class settingpage extends AppCompatActivity {
                     langEditor.putString("lang", "ar");
                     langEditor.apply();
                     showSnackbar("Language will change to Arabic after restarting app");
-                }
+                }*/
             }
 
             @Override
