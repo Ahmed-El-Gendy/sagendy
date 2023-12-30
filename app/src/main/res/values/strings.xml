@@ -13,7 +13,7 @@
     <string name="menu_location">Edit Location</string>
     <string name="menu_aboutus">About Us</string>
     <string name="saged">saged</string>
-    <string name="signin">Log In</string>
+    <string name="signin">LOG IN</string>
     <string name="signinbutton">Log In</string>
     <string name="logout">Log Out</string>
     <string name="darkmode">Dark Mode On</string>
@@ -43,5 +43,33 @@
     <string name="savelocation">Save Location</string>
     <string name="locationinfo">To see how to use it click here</string>
     <string name="locationuse">Take those 2 numbers and put them in the boxes</string>
+    <string name="numofpeople">Number of people: </string>
+    <string name="temp">Temperature: </string>
+    <string name="C"> °C</string>
+    <string name="youaway">You are away:</string>
+    <string name="km">km</string>
+    <string name="youhome">You are at home 😊</string>
+    <string name="gpson">GPS is ON</string>
+    <string name="gpsoff">GPS is OFF</string>
+    <string name="latitudeempty">Latitude Can\'t be Empty</string>
+    <string name="longitudeempty">Longitude Can\'t be Empty</string>
+    <string name="emailempty">Email Can\'t be Empty</string>
+    <string name="passempty">Password Can\'t be Empty</string>
+    <string name="loginsucc">Log In Successfully</string>
+    <string name="loginfail">Check Email and Password and try again</string>
+    <string name="selectlang">Select Language</string>
+    <string name="age">Age:</string>
+    <string name="subdate">Subscribe date:</string>
+    <string name="darkmod">Dark Mode Enabled</string>
+    <string name="lightmod">Light Mode Enabled</string>
+    <string name="restartchange">Language will change to English after restarting app</string>
+
+
+
+
+
+
+
+
 
 </resources>

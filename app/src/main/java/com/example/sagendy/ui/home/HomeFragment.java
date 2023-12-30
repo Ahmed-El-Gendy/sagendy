@@ -60,6 +60,9 @@ public class HomeFragment extends Fragment {
     private LocationManager locationManager;
     private Location currentLocation;
     SharedPreferences latitudeSave, longitudeSave, gpsSave;
+    float lat, lon;
+    boolean gpsbool;
+    String athome, farhome, km;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -68,7 +71,7 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);*/
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        MediaPlayer mediaPlayer = MediaPlayer.create(getContext(),R.raw.saged);
+        //MediaPlayer mediaPlayer = MediaPlayer.create(getContext(),R.raw.saged);
         mAuth = FirebaseAuth.getInstance();
         fireOk = root.findViewById(R.id.fireok);
         fireError = root.findViewById(R.id.fireerrrpic);
@@ -79,10 +82,18 @@ public class HomeFragment extends Fragment {
         people = root.findViewById(R.id.peopleText);
         temp = root.findViewById(R.id.temptext);
         homeDistance = root.findViewById(R.id.homechecktext);
-
+        latitudeSave = requireContext().getSharedPreferences("latitude", Context.MODE_PRIVATE);
+        longitudeSave = requireContext().getSharedPreferences("longitude", Context.MODE_PRIVATE);
+        lat = latitudeSave.getFloat("latitude", 31.258601F);
+        lon = longitudeSave.getFloat("longitude", 32.261924F);
+        gpsSave = requireContext().getSharedPreferences("gps", Context.MODE_PRIVATE);
+        gpsbool = gpsSave.getBoolean("gps", false);
+        athome = getResources().getString(R.string.youhome);
+        farhome = getResources().getString(R.string.youaway);
+        km = getResources().getString(R.string.km);
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("test");
+        //DatabaseReference myRef = database.getReference("test");
 
         //myRef.setValue(t);
         //mediaPlayer.start();
@@ -96,7 +107,7 @@ public class HomeFragment extends Fragment {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 int value = dataSnapshot.getValue(int.class);
-                temp.setText("Temperature: " + value + " °C");
+                temp.setText(getResources().getString(R.string.temp)+ value + getResources().getString(R.string.C));
             }
             @Override
             public void onCancelled(DatabaseError error) {
@@ -113,7 +124,7 @@ public class HomeFragment extends Fragment {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 int value = dataSnapshot.getValue(int.class);
-                people.setText("Numper of people is: "+value);
+                people.setText(getResources().getString(R.string.numofpeople) + " " + value);
             }
             @Override
             public void onCancelled(DatabaseError error) {
@@ -207,33 +218,59 @@ public class HomeFragment extends Fragment {
         // GPS
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        // Check for location permission
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Request location permissions
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 123);
-        } else {
-            // Permission is already granted, proceed to get the last known location
-            gpsSave = requireContext().getSharedPreferences("gps", Context.MODE_PRIVATE);
-            boolean gpsbool = gpsSave.getBoolean("gps", false);
-            if (gpsbool)
-            {
-                homeDistance.setVisibility(View.VISIBLE);
-                getLocation();
-            }
-            else
-            {
-                homeDistance.setVisibility(View.INVISIBLE);
-            }
-        }
-
-
-
         //final TextView textView = binding.textHome;
         //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
+
+    private void requestLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            // Request permission
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 123);
+            return;
+        }
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                // Location was changed
+                if (gpsbool)
+                {
+                    homeDistance.setVisibility(View.VISIBLE);
+                    currentLocation = location;
+                    double userLat = location.getLatitude();
+                    double userLong = location.getLongitude();
+                    Location locationA = new Location("Point A");
+                    locationA.setLatitude(lat); // Replace with the actual latitude of Point A
+                    locationA.setLongitude(lon); // Replace with the actual longitude of Point A
+                    Location locationB = new Location("Point B");
+                    locationB.setLatitude(userLat); // Replace with the actual latitude of Point B
+                    locationB.setLongitude(userLong); // Replace with the actual longitude of Point B
+                    float distance = getDistance(locationA, locationB);
+                    if (distance < 30)
+                    {
+                        homeDistance.setText(athome);
+                    }
+                    else
+                    {
+                        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                        String formattedNumber = decimalFormat.format(distance/1000);
+                        homeDistance.setText(farhome + " " + formattedNumber + " " + km);
+                    }
+                }
+                else {
+                    homeDistance.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+    private float getDistance(Location locationA, Location locationB) {
+        return locationA.distanceTo(locationB);
+    }
 
     @Override
     public void onStart() {
@@ -251,86 +288,6 @@ public class HomeFragment extends Fragment {
         super.onResume();
         // Check and request location updates when the activity is resumed
         requestLocationUpdates();
-    }
-    private void requestLocationUpdates() {
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    // Location was changed
-                    handleLocation(location);
-                }
-            });
-        }
-    }
-
-
-    @SuppressLint("MissingPermission")
-    private void getLocation() {
-        String locationProvider = LocationManager.NETWORK_PROVIDER;
-        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-
-        if (lastKnownLocation != null) {
-            // Use the last known location
-            double userLat = lastKnownLocation.getLatitude();
-            double userLong = lastKnownLocation.getLongitude();
-            System.out.println("Last Known Location: lat: " + userLat + ", long: " + userLong);
-        } else {
-            // Handle the case where last known location is null
-            System.out.println("Last Known Location is null");
-        }
-    }
-
-    private void handleLocation(Location location) {
-        if (location != null) {
-            // Handle the updated location
-            double userLat = location.getLatitude();
-            double userLong = location.getLongitude();
-            System.out.println("Updated Location: lat: " + userLat + ", long: " + userLong);
-            Location locationA = new Location("Point A");
-            latitudeSave = requireContext().getSharedPreferences("latitude", Context.MODE_PRIVATE);
-            longitudeSave = requireContext().getSharedPreferences("longitude", Context.MODE_PRIVATE);
-            float lat = latitudeSave.getFloat("latitude", 31.258601F);
-            float lon = longitudeSave.getFloat("longitude", 32.261924F);
-            locationA.setLatitude(lat); // Replace with the actual latitude of Point A
-            locationA.setLongitude(lon); // Replace with the actual longitude of Point A
-            System.out.println("SETTED Location: lat: " + lat + ", long: " + lon);
-            Location locationB = new Location("Point B");
-            locationB.setLatitude(userLat); // Replace with the actual latitude of Point B
-            locationB.setLongitude(userLong); // Replace with the actual longitude of Point B
-
-            float distance = getDistance(locationA, locationB);
-
-            // Print or use the distance as needed
-            System.out.println("Distance between Point A and Point B: " + distance + " meters");
-            if (distance < 30)
-            {
-                homeDistance.setText("You are at home \uD83D\uDE0A");
-            }
-            else
-            {
-                // Create a DecimalFormat object with the desired format
-                DecimalFormat decimalFormat = new DecimalFormat("#.##");
-                // Format the double number
-                String formattedNumber = decimalFormat.format(distance/1000);
-                homeDistance.setText("You are away " + formattedNumber + " km");
-            }
-        }
-    }
-    private float getDistance(Location locationA, Location locationB) {
-        return locationA.distanceTo(locationB);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 123 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Permission granted, proceed to get the last known location
-            getLocation();
-        } else {
-            // Permission denied, handle accordingly
-            System.out.println("Location permission denied");
-        }
     }
 
 }

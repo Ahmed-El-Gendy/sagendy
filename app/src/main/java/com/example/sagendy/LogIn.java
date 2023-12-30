@@ -40,8 +40,6 @@ public class LogIn extends AppCompatActivity {
         password = findViewById(R.id.loginpassword);
         logInButton = findViewById(R.id.loginButton);
         mAuth = FirebaseAuth.getInstance();
-
-        Toast.makeText(getApplicationContext(),"yes",Toast.LENGTH_LONG).show();
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,11 +59,11 @@ public class LogIn extends AppCompatActivity {
         String Userpassword = password.getText().toString();
         if (TextUtils.isEmpty(Useremail))
         {
-            showSnackbar("Email Can't be Empty");
+            showSnackbar(getResources().getString(R.string.emailempty));
         }
         else if (TextUtils.isEmpty(Userpassword))
         {
-            showSnackbar("Password Can't be Empty");
+            showSnackbar(getResources().getString(R.string.passempty));
         }
         else
         {
@@ -74,12 +72,12 @@ public class LogIn extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful())
                     {
-                        showSnackbar("Log In Successfully");
+                        showSnackbar(getResources().getString(R.string.loginsucc));
                         startActivity(new Intent(LogIn.this, MainActivity.class));
                     }
                     else
                     {
-                        showSnackbar("Check Email and Password and try again");
+                        showSnackbar(getResources().getString(R.string.loginfail));
                     }
                 }
             });

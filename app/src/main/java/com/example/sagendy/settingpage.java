@@ -99,14 +99,28 @@ public class settingpage extends AppCompatActivity {
                     //changeLang("en");
                     langEditor.putString("lang", "en");
                     langEditor.apply();
-                    showSnackbar("Language will change to English after restarting app");
+                    showSnackbar(getResources().getString(R.string.restartchange));
                 }
                 else if (selected.equals("عربي"))
                 {
                     //changeLang("ar");
                     langEditor.putString("lang", "ar");
                     langEditor.apply();
-                    showSnackbar("Language will change to Arabic after restarting app");
+                    showSnackbar(getResources().getString(R.string.restartchange));
+                }
+                else if (selected.equals("Türk"))
+                {
+                    //changeLang("tr");
+                    langEditor.putString("lang", "tr");
+                    langEditor.apply();
+                    showSnackbar(getResources().getString(R.string.restartchange));
+                }
+                else if (selected.equals("日本語"))
+                {
+                    //changeLang("ja");
+                    langEditor.putString("lang", "ja");
+                    langEditor.apply();
+                    showSnackbar(getResources().getString(R.string.restartchange));
                 }*/
             }
 
@@ -156,7 +170,7 @@ public class settingpage extends AppCompatActivity {
         String ageValue = ageSave.getString("age", null);
         if (ageValue != null)
         {
-            age.setText("Age: " + ageValue);
+            age.setText(getResources().getString(R.string.age) + " " + ageValue);
         }
 
 
@@ -168,7 +182,7 @@ public class settingpage extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 String value = dataSnapshot.getValue(String.class);
-                subDate.setText("Subscribe date: " + value);
+                subDate.setText(getResources().getString(R.string.subdate) + " " + value);
             }
             @Override
             public void onCancelled(DatabaseError error) {
@@ -270,7 +284,7 @@ public class settingpage extends AppCompatActivity {
                     // Update TextView text with EditText text
                     ageEditor.putString("age", ageEdit.getText().toString());
                     ageEditor.apply();
-                    age.setText("Age: " + ageEdit.getText());
+                    age.setText(getResources().getString(R.string.age)+ " " + ageEdit.getText());
                 }
             }
         });
@@ -287,16 +301,16 @@ public class settingpage extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // Handle the switch state change
-                if (nightMode) {
+                if (!isChecked) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     darkModeEditor = nightModeShared.edit();
                     darkModeEditor.putBoolean("night", false);
-                    showSnackbar("Dark Mode");
+                    showSnackbar(getResources().getString(R.string.darkmod));
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     darkModeEditor = nightModeShared.edit();
                     darkModeEditor.putBoolean("night", true);
-                    showSnackbar("Light Mode");
+                    showSnackbar(getResources().getString(R.string.lightmod));
                 }
                 darkModeEditor.apply();
             }

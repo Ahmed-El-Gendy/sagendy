@@ -105,11 +105,11 @@ public class LocationFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // Toggle is ON
-                    showSnackbar("GPS is ON");
+                    showSnackbar(getResources().getString(R.string.gpson));
                     gpsEditor.putBoolean("gps", true);
                 } else {
                     // Toggle is OFF
-                    showSnackbar("GPS is OFF");
+                    showSnackbar(getResources().getString(R.string.gpsoff));
                     gpsEditor.putBoolean("gps", false);
                 }
                 gpsEditor.apply();
@@ -123,11 +123,11 @@ public class LocationFragment extends Fragment {
                 String longitude = longitudeEdit.getText().toString();
                 if (TextUtils.isEmpty(latitude))
                 {
-                    showSnackbar("latitude Can't be Empty");
+                    showSnackbar(getResources().getString(R.string.latitudeempty));
                 }
                 else if (TextUtils.isEmpty(longitude))
                 {
-                    showSnackbar("longitude Can't be Empty");
+                    showSnackbar(getResources().getString(R.string.longitudeempty));
                 }
                 else
                 {

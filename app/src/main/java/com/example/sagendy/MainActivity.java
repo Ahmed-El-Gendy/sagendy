@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void changeLang(String lang) {
+    /*public void changeLang(String lang) {
         Configuration config = getBaseContext().getResources().getConfiguration();
         if (!"".equals(lang) && !config.locale.getLanguage().equals(lang)) {
 
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             conf.locale = locale;
             getBaseContext().getResources().updateConfiguration(conf, getBaseContext().getResources().getDisplayMetrics());
         }
-    }
+    }*/
 
     void showSnackbar(String message) {
         Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
