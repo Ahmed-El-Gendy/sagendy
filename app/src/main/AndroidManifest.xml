@@ -20,6 +20,9 @@
             android:name=".settingpage"
             android:exported="false" />
         <activity
+            android:name=".Intro"
+            android:exported="false" />
+        <activity
             android:name=".LogIn"
             android:exported="false" />
         <activity

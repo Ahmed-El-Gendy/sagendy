@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private FirebaseAuth mAuth;
     boolean nightMode;
-    SharedPreferences nightModeShared, langSave;
-    SharedPreferences.Editor langEditor;
+    SharedPreferences nightModeShared, langSave, introSave;
+    SharedPreferences.Editor langEditor, introEditor;
 
 
     @Override
@@ -62,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        introSave = getApplicationContext().getSharedPreferences("intro", Context.MODE_PRIVATE);
+        introEditor = introSave.edit();
         nightModeShared = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = nightModeShared.getBoolean("night", false);
         if (nightMode)
@@ -141,6 +142,13 @@ public class MainActivity extends AppCompatActivity {
         {
             startActivity(new Intent(MainActivity.this, LogIn.class));
         }
+        boolean introbool = introSave.getBoolean("intro", true);
+        if (introbool)
+        {
+            startActivity(new Intent(MainActivity.this, Intro.class));
+            introEditor.putBoolean("intro", false);
+            introEditor.apply();
+        }
     }
 
     /*public void changeLang(String lang) {
@@ -159,4 +167,10 @@ public class MainActivity extends AppCompatActivity {
         Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        introEditor.putBoolean("intro", true);
+        introEditor.apply();
+    }
 }

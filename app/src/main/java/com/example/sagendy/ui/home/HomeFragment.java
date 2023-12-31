@@ -63,6 +63,8 @@ public class HomeFragment extends Fragment {
     float lat, lon;
     boolean gpsbool;
     String athome, farhome, km;
+    SharedPreferences introSave;
+    SharedPreferences.Editor introEditor;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -94,7 +96,8 @@ public class HomeFragment extends Fragment {
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         //DatabaseReference myRef = database.getReference("test");
-
+        introSave = getContext().getSharedPreferences("intro", Context.MODE_PRIVATE);
+        introEditor = introSave.edit();
         //myRef.setValue(t);
         //mediaPlayer.start();
         //mediaPlayer.stop();
@@ -289,5 +292,6 @@ public class HomeFragment extends Fragment {
         // Check and request location updates when the activity is resumed
         requestLocationUpdates();
     }
+
 
 }
