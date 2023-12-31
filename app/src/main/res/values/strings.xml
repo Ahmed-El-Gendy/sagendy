@@ -48,7 +48,7 @@
     <string name="C"> °C</string>
     <string name="youaway">You are away:</string>
     <string name="km">km</string>
-    <string name="youhome">You are at home 😊</string>
+    <string name="youhome">You are at home</string>
     <string name="gpson">GPS is ON</string>
     <string name="gpsoff">GPS is OFF</string>
     <string name="latitudeempty">Latitude Can\'t be Empty</string>
