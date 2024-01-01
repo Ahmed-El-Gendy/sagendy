@@ -196,7 +196,7 @@ public class HomeFragment extends Fragment {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 int value = dataSnapshot.getValue(int.class);
-                if (value<1000)
+                if (value<1500)
                 {
                     gasOk.setVisibility(View.VISIBLE);
                     gasError.setVisibility(View.INVISIBLE);
