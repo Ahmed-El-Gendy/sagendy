@@ -137,6 +137,7 @@ public class LocationFragment extends Fragment {
                     longitudeEditor.putFloat("longitude", lon);
                     latitudeEditor.apply();
                     longitudeEditor.apply();
+                    showSnackbar(getResources().getString(R.string.locationsaved));
                 }
             }
         });

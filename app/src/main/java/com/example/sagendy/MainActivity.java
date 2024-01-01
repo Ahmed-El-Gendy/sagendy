@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        nightModeShared = getSharedPreferences("MODE", Context.MODE_PRIVATE);
+        /*nightModeShared = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = nightModeShared.getBoolean("night", false);
         if (nightMode)
         {
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         else
         {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+        }*/
 
 
         // check lang

@@ -291,7 +291,7 @@ public class settingpage extends AppCompatActivity {
 
 
 
-        nightModeShared = getSharedPreferences("MODE", Context.MODE_PRIVATE);
+        /*nightModeShared = getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = nightModeShared.getBoolean("night", false);
         if (nightMode)
         {
@@ -314,7 +314,7 @@ public class settingpage extends AppCompatActivity {
                 }
                 darkModeEditor.apply();
             }
-        });
+        });*/
 
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
