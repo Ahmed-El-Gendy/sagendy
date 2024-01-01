@@ -48,6 +48,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ktx.Firebase;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class HomeFragment extends Fragment {
@@ -59,12 +61,11 @@ public class HomeFragment extends Fragment {
     FirebaseAuth mAuth;
     private LocationManager locationManager;
     private Location currentLocation;
-    SharedPreferences latitudeSave, longitudeSave, gpsSave;
+    SharedPreferences latitudeSave, longitudeSave, gpsSave, historySave,firet,gast,safet;
+    SharedPreferences.Editor historyEditor,firetEdit,gastEdit,safetEdit;
     float lat, lon;
     boolean gpsbool;
     String athome, farhome, km;
-    SharedPreferences introSave;
-    SharedPreferences.Editor introEditor;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -93,11 +94,14 @@ public class HomeFragment extends Fragment {
         athome = getResources().getString(R.string.youhome);
         farhome = getResources().getString(R.string.youaway);
         km = getResources().getString(R.string.km);
+        historySave = requireContext().getSharedPreferences("history", Context.MODE_PRIVATE);
+        firet = requireContext().getSharedPreferences("firet", Context.MODE_PRIVATE);
+        gast = requireContext().getSharedPreferences("gast", Context.MODE_PRIVATE);
+        safet = requireContext().getSharedPreferences("safet", Context.MODE_PRIVATE);
+
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         //DatabaseReference myRef = database.getReference("test");
-        introSave = getContext().getSharedPreferences("intro", Context.MODE_PRIVATE);
-        introEditor = introSave.edit();
         //myRef.setValue(t);
         //mediaPlayer.start();
         //mediaPlayer.stop();
@@ -149,11 +153,31 @@ public class HomeFragment extends Fragment {
                 {
                     fireOk.setVisibility(View.VISIBLE);
                     fireError.setVisibility(View.INVISIBLE);
+                    firetEdit = firet.edit();
+                    firetEdit.putBoolean("firet", true);
+                    firetEdit.apply();
                 }
                 else
                 {
                     fireOk.setVisibility(View.INVISIBLE);
                     fireError.setVisibility(View.VISIBLE);
+                    boolean temp = firet.getBoolean("firet", true);
+                    if (temp)
+                    {
+                        // Get the current time
+                        long currentTimeMillis = System.currentTimeMillis();
+                        Date currentDate = new Date(currentTimeMillis);
+
+                        // Define the desired date format
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+                        // Format the date as a string
+                        String formattedDate = dateFormat.format(currentDate);
+                        printError("Fire Error " + formattedDate);
+                    }
+                    firetEdit = firet.edit();
+                    firetEdit.putBoolean("firet", false);
+                    firetEdit.apply();
                 }
             }
             @Override
@@ -176,11 +200,31 @@ public class HomeFragment extends Fragment {
                 {
                     gasOk.setVisibility(View.VISIBLE);
                     gasError.setVisibility(View.INVISIBLE);
+                    gastEdit = gast.edit();
+                    gastEdit.putBoolean("gast", true);
+                    gastEdit.apply();
                 }
                 else
                 {
                     gasOk.setVisibility(View.INVISIBLE);
                     gasError.setVisibility(View.VISIBLE);
+                    boolean temp = gast.getBoolean("gast", true);
+                    if (temp)
+                    {
+                        // Get the current time
+                        long currentTimeMillis = System.currentTimeMillis();
+                        Date currentDate = new Date(currentTimeMillis);
+
+                        // Define the desired date format
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+                        // Format the date as a string
+                        String formattedDate = dateFormat.format(currentDate);
+                        printError("Gas Error " + formattedDate);
+                    }
+                    gastEdit = gast.edit();
+                    gastEdit.putBoolean("gast", false);
+                    gastEdit.apply();
                 }
             }
             @Override
@@ -204,11 +248,31 @@ public class HomeFragment extends Fragment {
                 {
                     safeOk.setVisibility(View.VISIBLE);
                     safeError.setVisibility(View.INVISIBLE);
+                    safetEdit = safet.edit();
+                    safetEdit.putBoolean("safet", true);
+                    safetEdit.apply();
                 }
                 else
                 {
                     safeOk.setVisibility(View.INVISIBLE);
                     safeError.setVisibility(View.VISIBLE);
+                    boolean temp = safet.getBoolean("safet", true);
+                    if (temp)
+                    {
+                        // Get the current time
+                        long currentTimeMillis = System.currentTimeMillis();
+                        Date currentDate = new Date(currentTimeMillis);
+
+                        // Define the desired date format
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+                        // Format the date as a string
+                        String formattedDate = dateFormat.format(currentDate);
+                        printError("Safe Error " + formattedDate);
+                    }
+                    safetEdit = safet.edit();
+                    safetEdit.putBoolean("safet", false);
+                    safetEdit.apply();
                 }
             }
             @Override
@@ -291,6 +355,15 @@ public class HomeFragment extends Fragment {
         super.onResume();
         // Check and request location updates when the activity is resumed
         requestLocationUpdates();
+    }
+
+    void printError(String s)
+    {
+        String history = historySave.getString("history", null);
+        history = s + "\n---------------\n" + history;
+        historyEditor = historySave.edit();
+        historyEditor.putString("history", history);
+        historyEditor.apply();
     }
 
 

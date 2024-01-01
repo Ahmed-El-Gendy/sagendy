@@ -182,7 +182,7 @@ public class GalleryFragment extends Fragment {
         int[] bathlampvalue = new int[1];
         Drawable drawablebath = bathLamp.getDrawable();
         // Read bath room light value from the database
-        DatabaseReference readbathroomlightRef = database.getReference("bathroom/light");
+        DatabaseReference readbathroomlightRef = database.getReference("kitchen/light");
         readbathroomlightRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -217,7 +217,7 @@ public class GalleryFragment extends Fragment {
         int[] kitchenlampvalue = new int[1];
         Drawable drawablekitchen = kitchenLamp.getDrawable();
         // Read bath room light value from the database
-        DatabaseReference readkitchenlightRef = database.getReference("kitchen/light");
+        DatabaseReference readkitchenlightRef = database.getReference("bathroom/light");
         readkitchenlightRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
