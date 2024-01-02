@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -55,14 +56,21 @@ public class LogIn extends AppCompatActivity {
 
     private void logInUser()
     {
+
+        MediaPlayer correct = MediaPlayer.create(getApplicationContext(),R.raw.correct_pass);
+        MediaPlayer wrong = MediaPlayer.create(getApplicationContext(),R.raw.wrong_pass);
+        //correct.start();
+        //correct.stop();
         String Useremail = email.getText().toString();
         String Userpassword = password.getText().toString();
         if (TextUtils.isEmpty(Useremail))
         {
+            wrong.start();
             showSnackbar(getResources().getString(R.string.emailempty));
         }
         else if (TextUtils.isEmpty(Userpassword))
         {
+            wrong.start();
             showSnackbar(getResources().getString(R.string.passempty));
         }
         else
@@ -72,11 +80,13 @@ public class LogIn extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful())
                     {
+                        correct.start();
                         showSnackbar(getResources().getString(R.string.loginsucc));
                         startActivity(new Intent(LogIn.this, MainActivity.class));
                     }
                     else
                     {
+                        wrong.start();
                         showSnackbar(getResources().getString(R.string.loginfail));
                     }
                 }

@@ -31,7 +31,7 @@ public class GalleryFragment extends Fragment {
 
     private FragmentGalleryBinding binding;
     ImageView bathLamp, kitchenLamp, livingLamp;
-    TextView lampText;
+    TextView lampText, doorText;
     SeekBar seekBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -46,6 +46,7 @@ public class GalleryFragment extends Fragment {
         bathLamp = root.findViewById(R.id.leftrooflamp);
         kitchenLamp = root.findViewById(R.id.rightrooflamp);
         livingLamp = root.findViewById(R.id.livingroomlamp);
+        doorText = root.findViewById(R.id.doortext);
 
 
         seekBar.setMax(255);
@@ -110,7 +111,7 @@ public class GalleryFragment extends Fragment {
         });
 
 */
-        /*
+
         // Read livingroom door value from the database
         DatabaseReference readlivingroomdoorRef = database.getReference("livingroom/door");
         readlivingroomdoorRef.addValueEventListener(new ValueEventListener() {
@@ -121,13 +122,13 @@ public class GalleryFragment extends Fragment {
                 boolean value = dataSnapshot.getValue(boolean.class);
                 if (value)
                 {
-                    livingClose.setVisibility(View.VISIBLE);
-                    livingOpen.setVisibility(View.INVISIBLE);
+                    doorText.setText(getResources().getString(R.string.dooropen));
+                    doorText.setTextColor(getResources().getColor(R.color.red));
                 }
                 else
                 {
-                    livingClose.setVisibility(View.INVISIBLE);
-                    livingOpen.setVisibility(View.VISIBLE);
+                    doorText.setText(getResources().getString(R.string.doorclose));
+                    doorText.setTextColor(getResources().getColor(R.color.green));
                 }
             }
             @Override
@@ -137,7 +138,6 @@ public class GalleryFragment extends Fragment {
             }
         });
 
-*/
         int colorToFilterGray = Color.GRAY;
         int colorToFilterlight = Color.rgb(255, 128, 0);
         int colorToFilteryellow = Color.YELLOW;

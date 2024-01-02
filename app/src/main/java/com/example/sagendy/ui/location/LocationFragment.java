@@ -67,7 +67,7 @@ public class LocationFragment extends Fragment {
 
                 // Set the image and text in the custom layout
                 dialogImage.setImageResource(R.drawable.maps); // Replace with your image resource
-                dialogText.setText("Take those 2 numbers and put them in the boxes");
+                dialogText.setText(getResources().getString(R.string.takethosenum));
 
                 // Set the custom layout as the view for the dialog
                 locationInfoDialog.setView(dialogView);

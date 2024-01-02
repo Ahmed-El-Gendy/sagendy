@@ -6,7 +6,12 @@ import static androidx.constraintlayout.motion.widget.Debug.getLocation;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -16,13 +21,17 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,12 +39,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.sagendy.LogIn;
 import com.example.sagendy.MainActivity;
 import android.Manifest;
+import android.widget.ToggleButton;
+
 import com.example.sagendy.R;
 import com.example.sagendy.databinding.FragmentHomeBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -55,12 +68,16 @@ import java.util.Locale;
 public class HomeFragment extends Fragment {
 
 
+    private static final String CHANNEL_ID = "my_channel_01";
+    private static final int NOTIFICATION_ID = 1;
+    private static final int CALL_PHONE_PERMISSION_REQUEST_CODE = 1;
     private FragmentHomeBinding binding;
-    TextView people, temp, homeDistance;
+    TextView people, temp, homeDistance, humidity;
     ImageView fireOk, fireError, gasOk, gasError, safeOk, safeError;
     FirebaseAuth mAuth;
     private LocationManager locationManager;
     private Location currentLocation;
+    ToggleButton alarmButton;
     SharedPreferences latitudeSave, longitudeSave, gpsSave, historySave,firet,gast,safet;
     SharedPreferences.Editor historyEditor,firetEdit,gastEdit,safetEdit;
     float lat, lon;
@@ -74,7 +91,6 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);*/
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        //MediaPlayer mediaPlayer = MediaPlayer.create(getContext(),R.raw.saged);
         mAuth = FirebaseAuth.getInstance();
         fireOk = root.findViewById(R.id.fireok);
         fireError = root.findViewById(R.id.fireerrrpic);
@@ -98,13 +114,85 @@ public class HomeFragment extends Fragment {
         firet = requireContext().getSharedPreferences("firet", Context.MODE_PRIVATE);
         gast = requireContext().getSharedPreferences("gast", Context.MODE_PRIVATE);
         safet = requireContext().getSharedPreferences("safet", Context.MODE_PRIVATE);
+        humidity = root.findViewById(R.id.humiditytext);
+        alarmButton = root.findViewById(R.id.alarmbutton);
 
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         //DatabaseReference myRef = database.getReference("test");
         //myRef.setValue(t);
-        //mediaPlayer.start();
-        //mediaPlayer.stop();
+
+
+        //correct.start();
+        //correct.stop();
+
+
+        // Read alarm from the database
+        DatabaseReference readalarmRef = database.getReference("alarms");
+        readalarmRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Boolean value = dataSnapshot.getValue(boolean.class);
+                MediaPlayer alarm = MediaPlayer.create(getContext(),R.raw.alarmf);
+                if (value)
+                {
+                    alarmButton.setChecked(true);
+                    alarm.start();
+                }
+                else
+                {
+                    alarmButton.setChecked(false);
+                    if (alarm.isPlaying())
+                    {
+                        alarm.stop();
+                        alarm.release(); // Release resources
+                        alarm = null;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read alarm value.", error.toException());
+            }
+        });
+
+        alarmButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DatabaseReference myRef = database.getReference("alarmr");
+                DatabaseReference myReff = database.getReference("alarms");
+                if (isChecked)
+                {
+                    myRef.setValue(1);
+                    myReff.setValue(true);
+                }
+                else
+                {
+                    myRef.setValue(0);
+                    myReff.setValue(false);
+                }
+            }
+        });
+
+        // Read Temperature from the database
+        DatabaseReference readhumRef = database.getReference("humidity");
+        readhumRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                int value = dataSnapshot.getValue(int.class);
+                humidity.setText(getResources().getString(R.string.humidity)+ " " + value + " " + getResources().getString(R.string.percentage));
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read humidity value.", error.toException());
+            }
+        });
 
         // Read Temperature from the database
         DatabaseReference readtempRef = database.getReference("temp");
@@ -114,7 +202,7 @@ public class HomeFragment extends Fragment {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 int value = dataSnapshot.getValue(int.class);
-                temp.setText(getResources().getString(R.string.temp)+ value + getResources().getString(R.string.C));
+                temp.setText(getResources().getString(R.string.temp)+ " " + value + " " + getResources().getString(R.string.C));
             }
             @Override
             public void onCancelled(DatabaseError error) {
@@ -173,11 +261,38 @@ public class HomeFragment extends Fragment {
 
                         // Format the date as a string
                         String formattedDate = dateFormat.format(currentDate);
-                        printError("Fire Error " + formattedDate);
+                        printError(getResources().getString(R.string.fireerror) + " " + formattedDate);
                     }
                     firetEdit = firet.edit();
                     firetEdit.putBoolean("firet", false);
                     firetEdit.apply();
+
+
+                    createNotificationChannel();
+                    // Build the notification
+                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext(), "your_channel_id")
+                            .setSmallIcon(R.drawable.baseline_local_fire_department_24) // Set your notification icon here
+                            .setContentTitle(getResources().getString(R.string.firealert))
+                            .setContentText(getResources().getString(R.string.therefire))
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .setAutoCancel(true); // Dismiss the notification when clicked
+
+                    // Display the notification
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+                    notificationManager.notify(1, mBuilder.build());
+
+
+
+
+
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            showFireAlertDialog(getContext());
+                        }
+                    }, 2000); // 1000 milliseconds = 1 second
+
                 }
             }
             @Override
@@ -220,11 +335,32 @@ public class HomeFragment extends Fragment {
 
                         // Format the date as a string
                         String formattedDate = dateFormat.format(currentDate);
-                        printError("Gas Error " + formattedDate);
+                        printError(getResources().getString(R.string.gaserror) + " " + formattedDate);
                     }
                     gastEdit = gast.edit();
                     gastEdit.putBoolean("gast", false);
                     gastEdit.apply();
+
+                    createNotificationChannel();
+                    // Build the notification
+                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext(), "your_channel_id")
+                            .setSmallIcon(R.drawable.gaserror) // Set your notification icon here
+                            .setContentTitle(getResources().getString(R.string.gasalert))
+                            .setContentText(getResources().getString(R.string.theregas))
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .setAutoCancel(true); // Dismiss the notification when clicked
+
+                    // Display the notification
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+                    notificationManager.notify(1, mBuilder.build());
+
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            showGasAlertDialog(getContext());
+                        }
+                    }, 2000); // 1000 milliseconds = 1 second
                 }
             }
             @Override
@@ -268,11 +404,33 @@ public class HomeFragment extends Fragment {
 
                         // Format the date as a string
                         String formattedDate = dateFormat.format(currentDate);
-                        printError("Safe Error " + formattedDate);
+                        printError(getResources().getString(R.string.safeerror) + " " + formattedDate);
                     }
                     safetEdit = safet.edit();
                     safetEdit.putBoolean("safet", false);
                     safetEdit.apply();
+
+
+                    createNotificationChannel();
+                    // Build the notification
+                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext(), "your_channel_id")
+                            .setSmallIcon(R.drawable.download__1_) // Set your notification icon here
+                            .setContentTitle(getResources().getString(R.string.safealert))
+                            .setContentText(getResources().getString(R.string.safethere))
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .setAutoCancel(true); // Dismiss the notification when clicked
+
+                    // Display the notification
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+                    notificationManager.notify(1, mBuilder.build());
+
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            showSafeAlertDialog(getContext());
+                        }
+                    }, 2000); // 1000 milliseconds = 1 second
                 }
             }
             @Override
@@ -359,12 +517,193 @@ public class HomeFragment extends Fragment {
 
     void printError(String s)
     {
-        String history = historySave.getString("history", null);
+        String history = historySave.getString("history", "");
         history = s + "\n---------------\n" + history;
         historyEditor = historySave.edit();
         historyEditor.putString("history", history);
         historyEditor.apply();
     }
+
+
+    private void showFireAlertDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        // Set the dialog title and message
+        builder.setTitle(getResources().getString(R.string.firealert))
+                .setMessage(getResources().getString(R.string.firee) + "\n" + getResources().getString(R.string.fireee));
+
+        // Set positive button and its click listener
+        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                String phoneNumber = "180";
+                // Check if the app has permission to make a phone call
+                boolean check = true;
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    // If permission is granted, start the phone call
+                    initiatePhoneCall(phoneNumber);
+                } else {
+                    // If permission is not granted, request it
+                    ActivityCompat.requestPermissions(
+                            getActivity(),
+                            new String[]{Manifest.permission.CALL_PHONE},
+                            CALL_PHONE_PERMISSION_REQUEST_CODE
+                    );
+                    check = false;
+                }
+                if (!check)
+                {
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        // If permission is granted, start the phone call
+                        initiatePhoneCall(phoneNumber);
+                    }
+                }
+
+                dialog.dismiss(); // Close the dialog
+            }
+        });
+
+        // Set negative button and its click listener
+        builder.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+                dialog.dismiss(); // Close the dialog
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void showGasAlertDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        // Set the dialog title and message
+        builder.setTitle(getResources().getString(R.string.gasalert))
+                .setMessage(getResources().getString(R.string.gass) + "\n" + getResources().getString(R.string.gasss));
+
+        // Set positive button and its click listener
+        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                String phoneNumber = "129";
+                // Check if the app has permission to make a phone call
+                boolean check = true;
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    // If permission is granted, start the phone call
+                    initiatePhoneCall(phoneNumber);
+                } else {
+                    // If permission is not granted, request it
+                    ActivityCompat.requestPermissions(
+                            getActivity(),
+                            new String[]{Manifest.permission.CALL_PHONE},
+                            CALL_PHONE_PERMISSION_REQUEST_CODE
+                    );
+                    check = false;
+                }
+                if (!check)
+                {
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        // If permission is granted, start the phone call
+                        initiatePhoneCall(phoneNumber);
+                    }
+                }
+
+                dialog.dismiss(); // Close the dialog
+            }
+        });
+
+        // Set negative button and its click listener
+        builder.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+                dialog.dismiss(); // Close the dialog
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void showSafeAlertDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        // Set the dialog title and message
+        builder.setTitle(getResources().getString(R.string.safealert))
+                .setMessage(getResources().getString(R.string.safee) + "\n" + getResources().getString(R.string.safee));
+
+        // Set positive button and its click listener
+        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                String phoneNumber = "122";
+                // Check if the app has permission to make a phone call
+                boolean check = true;
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    // If permission is granted, start the phone call
+                    initiatePhoneCall(phoneNumber);
+                } else {
+                    // If permission is not granted, request it
+                    ActivityCompat.requestPermissions(
+                            getActivity(),
+                            new String[]{Manifest.permission.CALL_PHONE},
+                            CALL_PHONE_PERMISSION_REQUEST_CODE
+                    );
+                    check = false;
+                }
+                if (!check)
+                {
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        // If permission is granted, start the phone call
+                        initiatePhoneCall(phoneNumber);
+                    }
+                }
+
+                dialog.dismiss(); // Close the dialog
+            }
+        });
+
+        // Set negative button and its click listener
+        builder.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+                dialog.dismiss(); // Close the dialog
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+
+
+    private void initiatePhoneCall(String phoneNumber) {
+        Intent phoneIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
+        startActivity(phoneIntent);
+    }
+
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Channel Name";
+            String description = "Channel Description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("your_channel_id", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+
+
 
 
 }

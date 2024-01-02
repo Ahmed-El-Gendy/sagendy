@@ -22,6 +22,10 @@ public class AboutusFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_aboutus, container, false);
+
+
+
+
         return root;
     }
 

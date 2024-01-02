@@ -64,12 +64,36 @@
     <string name="lightmod">Light Mode Enabled</string>
     <string name="restartchange">Language will change to English after restarting app</string>
     <string name="locationsaved">Home location saved</string>
-
-
-
-
-
-
+    <string name="humidityvalue">humidity</string>
+    <string name="people">People</string>
+    <string name="humidity">Humidity: </string>
+    <string name="percentage"> %</string>
+    <string name="door">Door</string>
+    <string name="dooropen">Door is opened</string>
+    <string name="doorclose">Door is closed</string>
+    <string name="firealert">FIRE ALERT!</string>
+    <string name="therefire">There is Fire in your home</string>
+    <string name="gasalert">GAS ALERT!</string>
+    <string name="theregas">There is Gas leak in your home</string>
+    <string name="safealert">SAFETY ALERT!</string>
+    <string name="safethere">The home is being robbed</string>
+    <string name="firee">There is a Fire in the home.</string>
+    <string name="fireee">Do you want to call the fire department?</string>
+    <string name="gass">There is a Gas leak in the home.</string>
+    <string name="gasss">Do you want to call Gas emergency?</string>
+    <string name="safee">There is a Gas leak in the home.</string>
+    <string name="safeee">Do you want to call Gas emergency?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="fireerror">Fire Error</string>
+    <string name="gaserror">Gas Error</string>
+    <string name="safeerror">Safety Error</string>
+    <string name="alarmtext">Alarm</string>
+    <string name="takethosenum">Take those 2 numbers and put them in the boxes</string>
+    <string name="us">Crafted by Us</string>
+    <string name="sagedname">Saged Rayan</string>
+    <string name="gendyname">Ahmed El Gendy</string>
+    <string name="abassname">Ahmed Abass</string>
 
 
 </resources>
