@@ -44,14 +44,14 @@ public class Intro extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(Intro.this,MainActivity.class));
+                //startActivity(new Intent(Intro.this,MainActivity.class));
             }
         },SPLASH_SCREEN);
         Thread thread=new Thread(){
             @Override
             public void run(){
                 try {
-                    sleep(4000);
+                    sleep(3000);
                     Intent russplash=new Intent(getApplicationContext(),MainActivity.class);
                     startActivities(new Intent[]{russplash});
                     finish();
