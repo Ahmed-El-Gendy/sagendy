@@ -6,7 +6,6 @@
     <string name="nav_header_subtitle">Smart Living, Seamless Control</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
     <string name="menu_home">States</string>
     <string name="menu_gallery">Home View</string>
     <string name="menu_slideshow">History</string>
@@ -94,6 +93,6 @@
     <string name="sagedname">Saged Rayan</string>
     <string name="gendyname">Ahmed El Gendy</string>
     <string name="abassname">Ahmed Abass</string>
-
-
+    <string name="rating">Rate Us</string>
+    <string name="ratetext">Rate Us</string>
 </resources>

@@ -21,6 +21,10 @@
             android:icon="@drawable/baseline_edit_location_24"
             android:title="@string/editlocation" />
         <item
+            android:id="@+id/nav_rating"
+            android:icon="@drawable/baseline_star_rate_24"
+            android:title="@string/rating" />
+        <item
             android:id="@+id/nav_aboutus"
             android:icon="@drawable/baseline_info_24"
             android:title="@string/menu_aboutus" />

@@ -116,6 +116,7 @@ public class HomeFragment extends Fragment {
         safet = requireContext().getSharedPreferences("safet", Context.MODE_PRIVATE);
         humidity = root.findViewById(R.id.humiditytext);
         alarmButton = root.findViewById(R.id.alarmbutton);
+        MediaPlayer alarm = MediaPlayer.create(getContext(),R.raw.alarmf);
 
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -126,7 +127,6 @@ public class HomeFragment extends Fragment {
         //correct.start();
         //correct.stop();
 
-
         // Read alarm from the database
         DatabaseReference readalarmRef = database.getReference("alarms");
         readalarmRef.addValueEventListener(new ValueEventListener() {
@@ -135,7 +135,6 @@ public class HomeFragment extends Fragment {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 Boolean value = dataSnapshot.getValue(boolean.class);
-                MediaPlayer alarm = MediaPlayer.create(getContext(),R.raw.alarmf);
                 if (value)
                 {
                     alarmButton.setChecked(true);
@@ -146,9 +145,8 @@ public class HomeFragment extends Fragment {
                     alarmButton.setChecked(false);
                     if (alarm.isPlaying())
                     {
-                        alarm.stop();
-                        alarm.release(); // Release resources
-                        alarm = null;
+                        alarm.pause();
+                        alarm.seekTo(0);
                     }
                 }
             }
