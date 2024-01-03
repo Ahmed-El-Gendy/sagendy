@@ -1,5 +1,6 @@
 package com.example.sagendy.ui.rating;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,10 @@ public class RatingFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_rating, container, false);
+        MediaPlayer sad = MediaPlayer.create(getContext(),R.raw.sad);
+        MediaPlayer happy = MediaPlayer.create(getContext(),R.raw.happy);
+
+
 
         rateBar = root.findViewById(R.id.ratingBar);
         ratevalue = root.findViewById(R.id.ratevalue);
@@ -36,6 +41,14 @@ public class RatingFragment extends Fragment {
                 Toast.makeText(getContext(), "Rating: " + rating, Toast.LENGTH_SHORT).show();
                 ratevalue.setVisibility(View.VISIBLE);
                 ratevalue.setText(rating + "");
+                if (rating>=4)
+                {
+                    happy.start();
+                }
+                else
+                {
+                    sad.start();
+                }
             }
         });
 

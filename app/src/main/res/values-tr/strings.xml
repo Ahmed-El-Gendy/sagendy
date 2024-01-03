@@ -93,6 +93,8 @@
     <string name="sagedname">Saged Rayan</string>
     <string name="gendyname">Ahmed El Gendy</string>
     <string name="abassname">Ahmed Abass</string>
-    <string name="rating">Bizi Değerlendir</string>
+    <string name="menu_rating">Bizi Değerlendir</string>
     <string name="ratetext">Bizi Değerlendir</string>
+    <string name="welcome">SAGENDY\'ye Hoş Geldiniz</string>
+
 </resources>

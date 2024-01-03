@@ -1,6 +1,9 @@
 package com.example.sagendy;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -23,11 +26,15 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Locale;
+
 public class Intro extends AppCompatActivity {
     private TextView text50;
     private ImageView h;
     private Animation topanim,bottomanim;
     private static int SPLASH_SCREEN =5000;
+    SharedPreferences langSave;
+    SharedPreferences.Editor langEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,20 @@ public class Intro extends AppCompatActivity {
         setContentView((R.layout.activity_intro));
         text50=findViewById(R.id.txttt);
         h=findViewById(R.id.homeee);
+
+
+        // check lang
+        langSave = getSharedPreferences("lang", Context.MODE_PRIVATE);
+        String langValue = langSave.getString("lang", null).toString();
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        if (langValue != null && !"".equals(langValue) && !config.locale.getLanguage().equals(langValue))
+        {
+            changeLang(langValue);
+            showSnackbar(langValue);
+            recreate();
+        }
+
+
         topanim= AnimationUtils.loadAnimation(this,R.anim.top_anim);
         bottomanim= AnimationUtils.loadAnimation(this,R.anim.bottom_anim);
         h.setAnimation(topanim);
@@ -60,6 +81,18 @@ public class Intro extends AppCompatActivity {
                 }}};
         thread.start();
 
+    }
+
+    public void changeLang(String lang) {
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        if (!"".equals(lang) && !config.locale.getLanguage().equals(lang)) {
+
+            Locale locale = new Locale(lang);
+            Locale.setDefault(locale);
+            Configuration conf = new Configuration(config);
+            conf.locale = locale;
+            getBaseContext().getResources().updateConfiguration(conf, getBaseContext().getResources().getDisplayMetrics());
+        }
     }
 
     void showSnackbar(String message) {

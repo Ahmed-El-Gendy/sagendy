@@ -93,6 +93,7 @@
     <string name="sagedname">サジッド・ラヤン</string>
     <string name="gendyname">アフメド・エル・ゲンディ</string>
     <string name="abassname">アフメド・アバス</string>
-    <string name="rating">評価する</string>
+    <string name="menu_rating">評価する</string>
     <string name="ratetext">評価する</string>
+    <string name="welcome">SAGENDYへようこそ</string>
 </resources>

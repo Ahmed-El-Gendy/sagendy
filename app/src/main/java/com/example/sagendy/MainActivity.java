@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,24 +42,51 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private FirebaseAuth mAuth;
     boolean nightMode;
-    SharedPreferences nightModeShared, langSave;
-    SharedPreferences.Editor langEditor;
+    SharedPreferences nightModeShared;
+    SharedPreferences cnt;
+    SharedPreferences.Editor cntEditor;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        int temp = 0;
         mAuth = FirebaseAuth.getInstance();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-
+        cnt = getSharedPreferences("cnt", Context.MODE_PRIVATE);
+        cntEditor = cnt.edit();
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "saged", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                int temp = cnt.getInt("cnt", 0);
+                /*Snackbar.make(view, "Will be added in next update", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                if (temp<3)
+                {
+                    showSnackbar("Will be added in next update");
+                }
+                else if (temp>=3&&temp<10)
+                {
+                    showSnackbar("مخلاص يعم");
+                }
+                else if (temp>=10&&temp<50)
+                {
+                    showSnackbar("ماشي");
+                }
+                else if (temp == 20)
+                {
+                    showSnackbar("لو دوست بعد كده هقفل انا اتخنقت منك");
+                }
+                else
+                {
+                    finish();
+                    System.exit(0);
+                }
+                cntEditor.putInt("cnt", temp+1);
+                cntEditor.apply();
+
             }
         });
 
@@ -74,16 +102,7 @@ public class MainActivity extends AppCompatActivity {
         }*/
 
 
-        // check lang
-        /*langSave = getSharedPreferences("lang", Context.MODE_PRIVATE);
-        String langValue = langSave.getString("lang", null).toString();
-        Configuration config = getBaseContext().getResources().getConfiguration();
-        if (langValue != null && !"".equals(langValue) && !config.locale.getLanguage().equals(langValue))
-        {
-            changeLang(langValue);
-            showSnackbar(langValue);
-            recreate();
-        }*/
+
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -142,17 +161,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*public void changeLang(String lang) {
-        Configuration config = getBaseContext().getResources().getConfiguration();
-        if (!"".equals(lang) && !config.locale.getLanguage().equals(lang)) {
 
-            Locale locale = new Locale(lang);
-            Locale.setDefault(locale);
-            Configuration conf = new Configuration(config);
-            conf.locale = locale;
-            getBaseContext().getResources().updateConfiguration(conf, getBaseContext().getResources().getDisplayMetrics());
-        }
-    }*/
 
     void showSnackbar(String message) {
         Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();

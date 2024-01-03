@@ -93,6 +93,7 @@
     <string name="sagedname">Saged Rayan</string>
     <string name="gendyname">Ahmed El Gendy</string>
     <string name="abassname">Ahmed Abass</string>
-    <string name="rating">Rate Us</string>
+    <string name="menu_rating">Rate Us</string>
     <string name="ratetext">Rate Us</string>
+    <string name="welcome">Welcome to SAGENDY</string>
 </resources>

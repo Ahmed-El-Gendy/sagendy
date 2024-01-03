@@ -473,15 +473,19 @@ public class HomeFragment extends Fragment {
                     locationB.setLatitude(userLat); // Replace with the actual latitude of Point B
                     locationB.setLongitude(userLong); // Replace with the actual longitude of Point B
                     float distance = getDistance(locationA, locationB);
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference myRef = database.getReference("athome");
                     if (distance < 30)
                     {
                         homeDistance.setText(athome);
+                        myRef.setValue(1);
                     }
                     else
                     {
                         DecimalFormat decimalFormat = new DecimalFormat("#.##");
                         String formattedNumber = decimalFormat.format(distance/1000);
                         homeDistance.setText(farhome + " " + formattedNumber + " " + km);
+                        myRef.setValue(0);
                     }
                 }
                 else {
