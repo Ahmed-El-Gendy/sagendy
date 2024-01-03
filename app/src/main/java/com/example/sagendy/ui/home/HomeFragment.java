@@ -1,22 +1,17 @@
 package com.example.sagendy.ui.home;
 
-import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-import static androidx.constraintlayout.motion.widget.Debug.getLocation;
-import static androidx.core.content.ContextCompat.getSystemService;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,17 +20,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -44,21 +36,14 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.sagendy.LogIn;
-import com.example.sagendy.MainActivity;
-import android.Manifest;
-import android.widget.ToggleButton;
-
 import com.example.sagendy.R;
 import com.example.sagendy.databinding.FragmentHomeBinding;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.ktx.Firebase;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -68,8 +53,6 @@ import java.util.Locale;
 public class HomeFragment extends Fragment {
 
 
-    private static final String CHANNEL_ID = "my_channel_01";
-    private static final int NOTIFICATION_ID = 1;
     private static final int CALL_PHONE_PERMISSION_REQUEST_CODE = 1;
     private FragmentHomeBinding binding;
     TextView people, temp, homeDistance, humidity;
@@ -230,6 +213,7 @@ public class HomeFragment extends Fragment {
         // Read fire value from the database
         DatabaseReference readfireRef = database.getReference("fire");
         readfireRef.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -304,12 +288,13 @@ public class HomeFragment extends Fragment {
         // Read fire value from the database
         DatabaseReference readgasRef = database.getReference("gas");
         readgasRef.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 int value = dataSnapshot.getValue(int.class);
-                if (value<1500)
+                if (value<1200)
                 {
                     gasOk.setVisibility(View.VISIBLE);
                     gasError.setVisibility(View.INVISIBLE);
@@ -373,6 +358,7 @@ public class HomeFragment extends Fragment {
         // Read safety value from the database
         DatabaseReference readsafeRef = database.getReference("safe");
         readsafeRef.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again

@@ -80,8 +80,8 @@
     <string name="fireee">هل تريد الاتصال بإدارة الإطفاء؟</string>
     <string name="gass">هناك تسرب للغاز في المنزل.</string>
     <string name="gasss">هل تريد الاتصال بطوارئ للغاز؟</string>
-    <string name="safee">هناك تسرب للغاز في المنزل.</string>
-    <string name="safeee">هل تريد الاتصال بطوارئ للغاز؟</string>
+    <string name="safee">هناك عملية سرقة في المنزل.</string>
+    <string name="safeee">هل تريد الاتصال بالشرطة؟</string>
     <string name="yes">نعم</string>
     <string name="no">لا</string>
     <string name="fireerror">اشتعال حريق</string>

@@ -80,8 +80,8 @@
     <string name="fireee">Do you want to call the fire department?</string>
     <string name="gass">There is a Gas leak in the home.</string>
     <string name="gasss">Do you want to call Gas emergency?</string>
-    <string name="safee">There is a Gas leak in the home.</string>
-    <string name="safeee">Do you want to call Gas emergency?</string>
+    <string name="safee">There is a Safe Error in the home.</string>
+    <string name="safeee">Do you want to call the police?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="fireerror">Fire Error</string>
