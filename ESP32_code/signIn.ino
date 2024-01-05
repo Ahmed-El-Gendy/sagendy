@@ -11,9 +11,9 @@ DHT dht(DHTPIN, DHTTYPE);
 #include "addons/RTDBHelper.h"
 
 #define WIFI_SSID "AAA"
-#define WIFI_PASSWORD "12345678955"
-#define API_KEY "AIzaSyCBF6Z-1yazWIDOZmMeWNH6vybFeIgX_GA"  
-#define DATABASE_URL "https://sagendy-c42ea-default-rtdb.firebaseio.com/"
+#define WIFI_PASSWORD "deleted_for_privacy"
+#define API_KEY "deleted_for_privacy"  
+#define DATABASE_URL "deleted_for_privacy"
 #define USER_EMAIL "sagendywbeso@gmail.com"
 #define USER_PASSWORD "12345678180129122"
 
