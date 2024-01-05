@@ -67,26 +67,6 @@ public class MainActivity extends AppCompatActivity {
                 {
                     showSnackbar("Will be added in next update");
                 }
-                else if (temp>=3&&temp<10)
-                {
-                    showSnackbar("مخلاص يعم");
-                }
-                else if (temp>=10&&temp<50)
-                {
-                    showSnackbar("ماشي");
-                }
-                else if (temp == 20)
-                {
-                    showSnackbar("لو دوست بعد كده هقفل انا اتخنقت منك");
-                }
-                else
-                {
-                    finish();
-                    System.exit(0);
-                }
-                cntEditor.putInt("cnt", temp+1);
-                cntEditor.apply();
-
             }
         });
 
