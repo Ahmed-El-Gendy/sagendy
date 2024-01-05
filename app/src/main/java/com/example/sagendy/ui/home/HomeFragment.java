@@ -622,7 +622,7 @@ public class HomeFragment extends Fragment {
 
         // Set the dialog title and message
         builder.setTitle(getResources().getString(R.string.safealert))
-                .setMessage(getResources().getString(R.string.safee) + "\n" + getResources().getString(R.string.safee));
+                .setMessage(getResources().getString(R.string.safee) + "\n" + getResources().getString(R.string.safeee));
 
         // Set positive button and its click listener
         builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
